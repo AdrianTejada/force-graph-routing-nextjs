@@ -1,10 +1,10 @@
-export default function Home() {
+export default function Info() {
   return (<>
     <header className="mb-2 mt-8">
-      <h1 className='text-4xl'>Home</h1> 
+      <h1 className='text-4xl'>Info</h1> 
     </header>
     <main>
-      home content
+      info content
     </main>
   </>
   )
