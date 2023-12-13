@@ -1,8 +1,14 @@
 "use client";
 import { useRouter } from "next/navigation";
+import { useRef, useEffect } from "react";
+
+import * as d3 from "d3";
 
 import nodes from "@/data/nodes";
 import links from "@/data/links";
+import GRAPH_CONFIG from "@/data/graph.config";
+
+import { initializeGraph } from "@/utils/simulationHelpers";
 
 import Circles from "./Circles";
 import Lines from "./Lines";
@@ -10,10 +16,15 @@ import Labels from "./Labels";
 
 export default function ForceGraph({ width = 250, height = 250 }) {
   const router = useRouter();
+  const simulation = useRef();
 
   const handleRoute = (route) => {
     router.push(route);
   };
+
+  useEffect(() => {
+    initializeGraph(simulation, d3, GRAPH_CONFIG);
+  }, []);
 
   return (
     <svg
