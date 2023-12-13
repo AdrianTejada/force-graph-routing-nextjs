@@ -8,7 +8,7 @@ import nodes from "@/data/nodes";
 import links from "@/data/links";
 import GRAPH_CONFIG from "@/data/graph.config";
 
-import { initializeGraph, updateGraph } from "@/utils/simulationHelpers";
+import { initializeGraph, updateGraph, addD3EventHandlers } from "@/utils/simulationHelpers";
 
 import Circles from "./Circles";
 import Lines from "./Lines";
@@ -29,6 +29,10 @@ export default function ForceGraph({ width = 250, height = 250 }) {
 
   useEffect(() => {
     updateGraph(simulation, d3, nodes, links, currentPath, GRAPH_CONFIG);
+  }, [currentPath]);
+
+  useEffect(() => {
+    addD3EventHandlers(simulation, d3, currentPath, GRAPH_CONFIG)
   }, [currentPath]);
 
   return (

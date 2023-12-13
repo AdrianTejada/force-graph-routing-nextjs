@@ -86,7 +86,95 @@ function updateGraph(simulation, d3, nodes, links, currentPath, GRAPH_CONFIG) {
   });
 }
 
+function addD3EventHandlers(simulation, d3, currentPath, GRAPH_CONFIG) {
+  const {
+    CURRENT_NODE_RADIUS,
+    DEFAULT_NODE_RADIUS,
+    LINK_STROKE_WIDTH,
+    HOVER_NODE_RADIUS,
+    TRANSITION_LENGTH,
+  } = GRAPH_CONFIG;
+
+  // selecting SVG elements
+  const nodeSelection = d3.selectAll("circle");
+  const linkSelection = d3.selectAll("line");
+  const labelSelection = d3.selectAll("text");
+
+  // drag event
+  nodeSelection.call(
+    d3.drag().on("start", dragstarted).on("drag", dragged).on("end", dragended)
+  );
+
+  function dragstarted(event) {
+    if (!event.active) simulation.current.alphaTarget(0.3).restart();
+    event.subject.fx = event.subject.x;
+    event.subject.fy = event.subject.y;
+  }
+
+  function dragged(event) {
+    event.subject.fx = event.x;
+    event.subject.fy = event.y;
+  }
+
+  function dragended(event) {
+    if (!event.active) simulation.current.alphaTarget(0);
+    event.subject.fx = null;
+    event.subject.fy = null;
+  }
+
+  // hover event and styling logic
+  nodeSelection.on("mouseover", (event, currentNode) => {
+    d3.select(event.target).style("cursor", "pointer");
+
+    nodeSelection
+      .transition(TRANSITION_LENGTH)
+      .attr("fill", (node) => (node.id === currentNode.id ? "#333" : "#e1e1e1"))
+      .attr("r", (node) =>
+        node.id === currentNode.id ? HOVER_NODE_RADIUS : DEFAULT_NODE_RADIUS
+      );
+
+    linkSelection
+      .transition(TRANSITION_LENGTH)
+      .attr("stroke", (link) =>
+        currentNode.id === link.target.id
+          ? "#505050"
+          : currentNode.id === link.source.id
+          ? "#505050"
+          : "#e8e8e8"
+      );
+
+    labelSelection
+      .transition(TRANSITION_LENGTH)
+      .style("font-size", (node) =>
+        currentNode.id === node.id ? ".9em" : ".75em"
+      );
+  });
+
+  // mouse out event and styling logic
+  nodeSelection.on("mouseout", (event) => {
+    d3.select(event.target).style("cursor", "pointer");
+
+    nodeSelection
+      .transition()
+      .attr("fill", (node) => (node.route === currentPath ? "#333" : "#e1e1e1"))
+      .attr("r", (node) =>
+        node.route === currentPath ? CURRENT_NODE_RADIUS : DEFAULT_NODE_RADIUS
+      );
+
+    linkSelection
+      .transition()
+      .attr("stroke", "#e1e1e1")
+      .attr("stroke-width", LINK_STROKE_WIDTH);
+
+    labelSelection
+      .transition()
+      .attr("fill", "#000")
+      .style("font-size", ".75em");
+  });
+}
+
 export { 
   initializeGraph, 
-  updateGraph 
+  updateGraph,
+  addD3EventHandlers
 };
