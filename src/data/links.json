@@ -1,0 +1,22 @@
+[
+  {
+    "source": "home",
+    "target": "work",
+    "id": 0
+  },
+  {
+    "source": "home",
+    "target": "blog",
+    "id": 1
+  },
+  {
+    "source": "home",
+    "target": "info",
+    "id": 2
+  },
+  {
+    "source": "home",
+    "target": "contact",
+    "id": 3
+  }
+]
