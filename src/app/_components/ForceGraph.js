@@ -6,7 +6,6 @@ import * as d3 from "d3";
 
 import nodes from "@/data/nodes";
 import links from "@/data/links";
-import GRAPH_CONFIG from "@/data/graph.config";
 
 import { initializeGraph, updateGraph, addD3EventHandlers } from "@/utils/simulationHelpers";
 
@@ -24,15 +23,15 @@ export default function ForceGraph({ width = 250, height = 250 }) {
   };
 
   useEffect(() => {
-    initializeGraph(simulation, d3, GRAPH_CONFIG);
+    initializeGraph(simulation, d3);
   }, []);
 
   useEffect(() => {
-    updateGraph(simulation, d3, nodes, links, currentPath, GRAPH_CONFIG);
+    updateGraph(simulation, d3, nodes, links, currentPath);
   }, [currentPath]);
 
   useEffect(() => {
-    addD3EventHandlers(simulation, d3, currentPath, GRAPH_CONFIG)
+    addD3EventHandlers(simulation, d3, currentPath)
   }, [currentPath]);
 
   return (
