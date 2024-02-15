@@ -2,6 +2,6 @@
 
 export default function Circles({ nodes, handleRoute }) {
   return nodes.map((node) => (
-    <circle key={node.id} onClick={() => handleRoute(node.route)} />
+    <circle key={node.id} onClick={() => handleRoute(node)} />
   ));
 }

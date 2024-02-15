@@ -1,6 +1,7 @@
 import GRAPH_CONFIG from '@/data/graph.config';
+import * as d3 from "d3";
 
-function initializeGraph(simulation, d3) {
+function initializeGraph(simulation) {
   const {
     LINK_DISTANCE,
     LINK_STRENGTH,
@@ -33,7 +34,7 @@ function initializeGraph(simulation, d3) {
     .alphaTarget(0);
 }
 
-function updateGraph(simulation, d3, nodes, links, currentPath) {
+function updateGraph(simulation, nodes, links, currentPath) {
   const {
     CURRENT_NODE_RADIUS,
     DEFAULT_NODE_RADIUS,
@@ -80,18 +81,16 @@ function updateGraph(simulation, d3, nodes, links, currentPath) {
   });
 }
 
-function addD3EventHandlers(simulation, d3, currentPath) {
+function addD3EventHandlers(simulation, currentPath) {
   const {
     CURRENT_NODE_RADIUS,
     DEFAULT_NODE_RADIUS,
-    LINK_STROKE_WIDTH,
     HOVER_NODE_RADIUS,
     TRANSITION_LENGTH,
   } = GRAPH_CONFIG;
 
   // selecting SVG elements
   const nodeSelection = d3.selectAll("circle");
-  const linkSelection = d3.selectAll("line");
   const labelSelection = d3.selectAll("text");
 
   // drag event
@@ -127,16 +126,6 @@ function addD3EventHandlers(simulation, d3, currentPath) {
         node.id === currentNode.id ? HOVER_NODE_RADIUS : DEFAULT_NODE_RADIUS
       );
 
-    linkSelection
-      .transition(TRANSITION_LENGTH)
-      .attr("stroke", (link) =>
-        currentNode.id === link.target.id
-          ? "#505050"
-          : currentNode.id === link.source.id
-          ? "#505050"
-          : "#e8e8e8"
-      );
-
     labelSelection
       .transition(TRANSITION_LENGTH)
       .style("font-size", (node) =>
@@ -154,11 +143,6 @@ function addD3EventHandlers(simulation, d3, currentPath) {
       .attr("r", (node) =>
         node.route === currentPath ? CURRENT_NODE_RADIUS : DEFAULT_NODE_RADIUS
       );
-
-    linkSelection
-      .transition()
-      .attr("stroke", "#e1e1e1")
-      .attr("stroke-width", LINK_STROKE_WIDTH);
 
     labelSelection
       .transition()

@@ -2,8 +2,6 @@
 import { useRouter, usePathname } from "next/navigation";
 import { useRef, useEffect } from "react";
 
-import * as d3 from "d3";
-
 import nodes from "@/data/nodes";
 import links from "@/data/links";
 
@@ -18,20 +16,20 @@ export default function ForceGraph({ width = 250, height = 250 }) {
   const simulation = useRef();
 	const currentPath = usePathname();
 
-  const handleRoute = (route) => {
-    router.push(route);
+  const handleRoute = (node) => {
+    router.push(node.route);
   };
 
   useEffect(() => {
-    initializeGraph(simulation, d3);
+    initializeGraph(simulation);
   }, []);
 
   useEffect(() => {
-    updateGraph(simulation, d3, nodes, links, currentPath);
+    updateGraph(simulation, nodes, links, currentPath);
   }, [currentPath]);
 
   useEffect(() => {
-    addD3EventHandlers(simulation, d3, currentPath)
+    addD3EventHandlers(simulation, currentPath)
   }, [currentPath]);
 
   return (
